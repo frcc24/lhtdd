@@ -29,10 +29,10 @@ class LoginHeader extends StatelessWidget {
           bottomLeft: Radius.circular(80),
         ),
       ),
-      child: Padding(
-        padding: const EdgeInsets.all(18.0),
-        child: const Image(
-          image: AssetImage('assets/app_icon.png'),
+      child: const Padding(
+        padding: EdgeInsets.all(18.0),
+        child: Image(
+          image: AssetImage('assets/logo4u.png'),
         ),
       ),
     );

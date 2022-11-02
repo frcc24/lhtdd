@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'local_widgets/local_wodgets.dart';
 
 class LoginPage extends StatelessWidget {
+  static const ROUTE = '/login_page';
+
   const LoginPage({Key? key}) : super(key: key);
 
   @override
@@ -32,15 +34,14 @@ class LoginPage extends StatelessWidget {
                       const SizedBox(
                         height: 28,
                       ),
-                      RaisedButton(
-                          onPressed: () {}, child: Text('LogIn'.toUpperCase())),
+                      RaisedButton(onPressed: () {}, child: Text('Sing In')),
                       const SizedBox(
                         height: 12,
                       ),
                       FlatButton.icon(
                         onPressed: () {},
-                        label: const Text('Create Account'),
-                        icon: const Icon(Icons.person),
+                        label: const Text('Forgot password'),
+                        icon: const Icon(Icons.lock_reset),
                       ),
                     ],
                   ),

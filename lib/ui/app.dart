@@ -1,53 +1,61 @@
 import 'package:flutter/material.dart';
+import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:untitled1/ui/login/login_page.dart';
+
+import '../routes/pages.dart';
 
 class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final primaryColor = Color.fromRGBO(208, 41, 49, 1.0);
-    final primaryColorDark = Color.fromRGBO(103, 9, 14, 1.0);
-    final primaryColorLight = Color.fromRGBO(185, 72, 76, 1.0);
-    final secondaryColor = Color.fromRGBO(211, 47, 47, 1.0);
+    final primaryColor = Color.fromRGBO(86, 66, 103, 1.0);
+    final primaryColorDark = Color.fromRGBO(57, 43, 68, 1.0);
+    final primaryColorLight = Color.fromRGBO(87, 75, 101, 1.0);
 
-    return MaterialApp(
+    return GetMaterialApp(
       title: 'LHTDD',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primaryColor: secondaryColor,
-        primaryColorDark: primaryColorDark,
-        primaryColorLight: primaryColorLight,
-        backgroundColor: Colors.white,
-        accentColor: secondaryColor,
-        textTheme: TextTheme(
-          headline1: TextStyle(
-              fontSize: 30,
-              fontWeight: FontWeight.bold,
-              color: primaryColorDark),
+      theme: buildThemeData(primaryColor, primaryColorDark, primaryColorLight),
+      initialRoute: LoginPage.ROUTE,
+      //initialBinding: widget.globalBindings ?? GlobalBindings(),
+      getPages: getAppPages(),
+      home: const LoginPage(),
+    );
+  }
+
+  ThemeData buildThemeData(
+      Color primaryColor, Color primaryColorDark, Color primaryColorLight) {
+    return ThemeData(
+      primaryColor: primaryColor,
+      primaryColorDark: primaryColorDark,
+      primaryColorLight: primaryColorLight,
+      backgroundColor: Colors.white,
+      accentColor: primaryColor,
+      textTheme: TextTheme(
+        headline1: TextStyle(
+            fontSize: 35, fontWeight: FontWeight.w500, color: primaryColorDark),
+      ),
+      inputDecorationTheme: InputDecorationTheme(
+        focusColor: primaryColor,
+        alignLabelWithHint: true,
+        enabledBorder: UnderlineInputBorder(
+          borderSide: BorderSide(color: primaryColorLight),
         ),
-        inputDecorationTheme: InputDecorationTheme(
-          focusColor: primaryColor,
-          alignLabelWithHint: true,
-          enabledBorder: UnderlineInputBorder(
-            borderSide: BorderSide(color: primaryColorLight),
-          ),
-          focusedBorder: UnderlineInputBorder(
-            borderSide: BorderSide(color: primaryColor),
-          ),
-        ),
-        buttonTheme: ButtonThemeData(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
-          ),
-          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-          textTheme: ButtonTextTheme.primary,
-          buttonColor: primaryColor,
-          splashColor: primaryColorLight,
-          colorScheme: ColorScheme.light(
-            primary: primaryColor,
-          ),
+        focusedBorder: UnderlineInputBorder(
+          borderSide: BorderSide(color: primaryColor),
         ),
       ),
-      home: const LoginPage(),
+      buttonTheme: ButtonThemeData(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 60),
+        textTheme: ButtonTextTheme.primary,
+        buttonColor: primaryColor,
+        splashColor: primaryColorLight,
+        colorScheme: ColorScheme.light(
+          primary: primaryColor,
+        ),
+      ),
     );
   }
 }
