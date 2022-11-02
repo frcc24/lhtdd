@@ -4,10 +4,15 @@ import 'package:mocktail/mocktail.dart';
 import 'package:untitled1/data/data.dart';
 import 'package:untitled1/domain/domain.dart';
 
+import 'mocks/mocks.dart';
+
 void main() {
   late HttpClientSpy httpClient;
   late String url;
   late RemoteAuthentication sut;
+  final email = faker.internet.email();
+  final password = faker.internet.password(length: 10);
+  final params = AuthenticationParams(email: email, password: password);
 
   setUp(() {
     httpClient = HttpClientSpy();
@@ -16,16 +21,37 @@ void main() {
   });
 
   test('Should call HttpClient with correct values', () async {
-    final email = faker.internet.email();
-    final password = faker.internet.password(length: 10);
+    httpClient.mockClientCall(url: url, method: 'post');
 
-    await sut.auth(AuthenticationParams(email: email, password: password));
+    await sut.auth(params);
 
     verify(() => httpClient.request(
         url: url,
         method: 'post',
-        body: {'email': email, 'password': password})).called(1);
+        body: {'email': email, 'password': password}));
+  });
+
+  test('Should return UnexpectedError if returns 400', () async {
+    httpClient.mockClientCallError(HttpError.badRequest);
+
+    final future = sut.auth(params);
+
+    expect(future, throwsA(DomainError.unexpected));
+  });
+
+  test('Should return UnexpectedError if returns 404', () async {
+    httpClient.mockClientCallError(HttpError.notFound);
+
+    final future = sut.auth(params);
+
+    expect(future, throwsA(DomainError.unexpected));
+  });
+
+  test('Should return UnexpectedError if returns 400', () async {
+    httpClient.mockClientCallError(HttpError.badRequest);
+
+    final future = sut.auth(params);
+
+    expect(future, throwsA(DomainError.unexpected));
   });
 }
-
-class HttpClientSpy extends Mock implements HttpClient {}
