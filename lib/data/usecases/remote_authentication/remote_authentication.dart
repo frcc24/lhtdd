@@ -7,6 +7,7 @@ class RemoteAuthentication implements Authentication {
 
   RemoteAuthentication({required this.httpClient, required this.url});
 
+  @override
   Future<AccountEntity> auth(AuthenticationParams params) async {
     final body = RemoteAuthenticationParams.fromModel(params).toJson();
 
@@ -22,7 +23,9 @@ class RemoteAuthentication implements Authentication {
         case HttpError.notFound:
         case HttpError.serverError:
         case HttpError.invalidData:
+        case HttpError.forbidden:
           throw DomainError.unexpected;
+          break;
       }
     }
   }

@@ -2,6 +2,7 @@ import 'package:faker/faker.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:untitled1/data/http/http.dart';
 import 'package:untitled1/infra/http/http_adapter.dart';
 
 void main() async {
@@ -103,6 +104,68 @@ void main() async {
 
       //todo test with null later
       expect(response, {});
+    });
+
+    test('Should return BadRequestError if response = 400 ', () async {
+      when(() => client.post(any(),
+          headers: any(named: 'headers'),
+          body: any(named: 'body'))).thenAnswer((_) async => Response('', 400));
+
+      final future = sut.request(url: url, method: 'post');
+
+      //todo test with null later
+      expect(future, throwsA(HttpError.badRequest));
+    });
+    test('Should return BadRequestError if response = 401 ', () async {
+      when(() => client.post(any(),
+          headers: any(named: 'headers'),
+          body: any(named: 'body'))).thenAnswer((_) async => Response('', 401));
+
+      final future = sut.request(url: url, method: 'post');
+
+      //todo test with null later
+      expect(future, throwsA(HttpError.unauthorized));
+    });
+
+    test('Should return BadRequestError if response = 403 ', () async {
+      when(() => client.post(any(),
+          headers: any(named: 'headers'),
+          body: any(named: 'body'))).thenAnswer((_) async => Response('', 403));
+
+      final future = sut.request(url: url, method: 'post');
+
+      //todo test with null later
+      expect(future, throwsA(HttpError.forbidden));
+    });
+
+    test('Should return BadRequestError if response = 404 ', () async {
+      when(() => client.post(any(),
+          headers: any(named: 'headers'),
+          body: any(named: 'body'))).thenAnswer((_) async => Response('', 404));
+
+      final future = sut.request(url: url, method: 'post');
+
+      //todo test with null later
+      expect(future, throwsA(HttpError.notFound));
+    });
+
+    test('Should return BadRequestError if response = 500 ', () async {
+      when(() => client.post(any(),
+          headers: any(named: 'headers'),
+          body: any(named: 'body'))).thenAnswer((_) async => Response('', 500));
+
+      final future = sut.request(url: url, method: 'post');
+
+      //todo test with null later
+      expect(future, throwsA(HttpError.serverError));
+    });
+  });
+
+  group('common | ', () {
+    test('Should return server error for invalid method', () async {
+      final future = sut.request(url: url, method: 'any');
+
+      expect(future, throwsA(HttpError.serverError));
     });
   });
 }

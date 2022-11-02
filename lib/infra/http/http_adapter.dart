@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:http/http.dart';
+import 'package:untitled1/data/http/http.dart';
 import 'package:untitled1/data/http/http_client.dart';
 
 class HttpAdapter implements HttpClient {
@@ -17,15 +18,34 @@ class HttpAdapter implements HttpClient {
     };
     final bodyToSend = body != null ? jsonEncode(body) : null;
 
-    final response =
-        await client.post(Uri.parse(url), headers: headers, body: bodyToSend);
+    var response = Response('', 500);
+    if (method == 'post') {
+      response =
+          await client.post(Uri.parse(url), headers: headers, body: bodyToSend);
+      return handleResponse(response);
+    } else {
+      throw HttpError.serverError;
+    }
+  }
 
+  Map handleResponse(Response response) {
     //todo change to test with null later
     if (response.statusCode == 200) {
       return response.body.isNotEmpty ? jsonDecode(response.body) : {};
-    } else {
-      //todo change to test with null later
+    } else if (response.statusCode == 400) {
+      throw HttpError.badRequest;
+    } else if (response.statusCode == 500) {
+      throw HttpError.serverError;
+    } else if (response.statusCode == 401) {
+      throw HttpError.unauthorized;
+    } else if (response.statusCode == 403) {
+      throw HttpError.forbidden;
+    } else if (response.statusCode == 404) {
+      throw HttpError.notFound;
+    } else if (response.statusCode == 204) {
       return {};
+    } else {
+      throw HttpError.serverError;
     }
   }
 }
