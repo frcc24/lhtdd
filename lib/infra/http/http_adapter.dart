@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart';
 import 'package:untitled1/data/http/http.dart';
 import 'package:untitled1/data/http/http_client.dart';
@@ -19,13 +20,19 @@ class HttpAdapter implements HttpClient {
     final bodyToSend = body != null ? jsonEncode(body) : null;
 
     var response = Response('', 500);
-    if (method == 'post') {
-      response =
-          await client.post(Uri.parse(url), headers: headers, body: bodyToSend);
-      return handleResponse(response);
-    } else {
+    try {
+      if (method == 'post') {
+        response = await client.post(Uri.parse(url),
+            headers: headers, body: bodyToSend);
+      } else {
+        throw HttpError.serverError;
+      }
+    } catch (error) {
+      debugPrint(error.toString());
       throw HttpError.serverError;
     }
+
+    return handleResponse(response);
   }
 
   Map handleResponse(Response response) {

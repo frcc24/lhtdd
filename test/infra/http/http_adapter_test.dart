@@ -167,6 +167,16 @@ void main() async {
 
       expect(future, throwsA(HttpError.serverError));
     });
+
+    test('Should return server error if post throws', () async {
+      when(() => client.post(any(),
+          headers: any(named: 'headers'),
+          body: any(named: 'body'))).thenThrow(Exception());
+
+      final future = sut.request(url: url, method: 'post');
+
+      expect(future, throwsA(HttpError.serverError));
+    });
   });
 }
 
