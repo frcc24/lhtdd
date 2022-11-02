@@ -21,7 +21,10 @@ void main() {
   });
 
   test('Should call HttpClient with correct values', () async {
-    httpClient.mockClientCall(url: url, method: 'post');
+    final accessToken = faker.guid.guid();
+
+    httpClient.mockClientCall(
+        url: url, method: 'post', accessToken: accessToken);
 
     await sut.auth(params);
 
@@ -61,5 +64,26 @@ void main() {
     final future = sut.auth(params);
 
     expect(future, throwsA(DomainError.invalidCredentials));
+  });
+
+  test('Should return an AccountEntity if returns 200', () async {
+    final accessToken = faker.guid.guid();
+
+    httpClient.mockClientCall(
+        url: url, method: 'post', accessToken: accessToken);
+
+    final account = await sut.auth(params);
+
+    expect(account.token, accessToken);
+  });
+
+  test('Should return UnexpectedError if returns 200 with invalid data',
+      () async {
+    httpClient.mockClientCallInvalid(
+        url: url, method: 'post', accessToken: 'accessToken');
+
+    final future = sut.auth(params);
+
+    expect(future, throwsA(DomainError.unexpected));
   });
 }
