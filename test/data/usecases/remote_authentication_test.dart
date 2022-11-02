@@ -54,4 +54,12 @@ void main() {
 
     expect(future, throwsA(DomainError.unexpected));
   });
+
+  test('Should return InvalidCredentials if returns 401', () async {
+    httpClient.mockClientCallError(HttpError.unauthorized);
+
+    final future = sut.auth(params);
+
+    expect(future, throwsA(DomainError.invalidCredentials));
+  });
 }
