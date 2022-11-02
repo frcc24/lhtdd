@@ -1,10 +1,8 @@
-import 'dart:convert';
-
 import 'package:faker/faker.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:untitled1/data/http/http_client.dart';
+import 'package:untitled1/infra/http/http_adapter.dart';
 
 void main() async {
   late HttpAdapter sut;
@@ -75,6 +73,16 @@ void main() async {
       expect(response, {'anyKey': 'anyValue'});
     });
 
+    test('Should return null/empty if response = 204 with data', () async {
+      when(() => client.post(any(),
+              headers: any(named: 'headers'), body: any(named: 'body')))
+          .thenAnswer((_) async => Response('{"anyKey": "anyValue"}', 204));
+
+      final response = await sut.request(url: url, method: 'post');
+
+      expect(response, {});
+    });
+
     test('Should return empty/ornull if response = 204 with no data', () async {
       when(() => client.post(any(),
           headers: any(named: 'headers'),
@@ -85,29 +93,18 @@ void main() async {
       //todo test with null later
       expect(response, {});
     });
+
+    test('Should return empty/ornull if response = 200 with no data', () async {
+      when(() => client.post(any(),
+          headers: any(named: 'headers'),
+          body: any(named: 'body'))).thenAnswer((_) async => Response('', 200));
+
+      final response = await sut.request(url: url, method: 'post');
+
+      //todo test with null later
+      expect(response, {});
+    });
   });
-}
-
-class HttpAdapter implements HttpClient {
-  final Client client;
-
-  HttpAdapter({required this.client});
-
-  @override
-  Future<Map> request(
-      {required String url, required String method, Map? body}) async {
-    final headers = {
-      'content-type': 'application/json',
-      'accept': 'application/json',
-    };
-    final bodyToSend = body != null ? jsonEncode(body) : null;
-
-    final response =
-        await client.post(Uri.parse(url), headers: headers, body: bodyToSend);
-
-    //todo change to test with null later
-    return response.body.isNotEmpty ? jsonDecode(response.body) : {};
-  }
 }
 
 class ClientSpy extends Mock implements Client {}
