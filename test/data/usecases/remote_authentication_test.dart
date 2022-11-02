@@ -47,8 +47,8 @@ void main() {
     expect(future, throwsA(DomainError.unexpected));
   });
 
-  test('Should return UnexpectedError if returns 400', () async {
-    httpClient.mockClientCallError(HttpError.badRequest);
+  test('Should return UnexpectedError if returns 500', () async {
+    httpClient.mockClientCallError(HttpError.serverError);
 
     final future = sut.auth(params);
 
