@@ -5,7 +5,7 @@ import 'package:untitled1/data/http/http.dart';
 class HttpClientSpy extends Mock implements HttpClient {
   //todo accessToken and name comes from API
 
-  When mockRequest() => when(() => request(
+  When _mockRequest() => when(() => request(
       url: any(named: 'url'),
       method: any(named: 'method'),
       body: any(named: 'body')));
@@ -15,7 +15,7 @@ class HttpClientSpy extends Mock implements HttpClient {
           required String method,
           Map? body,
           String? accessToken}) =>
-      mockRequest().thenAnswer((_) async =>
+      _mockRequest().thenAnswer((_) async =>
           {'accessToken': accessToken, 'name': faker.person.name()});
 
   void mockClientCallInvalid(
@@ -23,7 +23,7 @@ class HttpClientSpy extends Mock implements HttpClient {
           required String method,
           Map? body,
           String? accessToken}) =>
-      mockRequest().thenAnswer((_) async => {'invalid': 'invalid'});
+      _mockRequest().thenAnswer((_) async => {'invalid': 'invalid'});
 
-  void mockClientCallError(HttpError error) => mockRequest().thenThrow(error);
+  void mockClientCallError(HttpError error) => _mockRequest().thenThrow(error);
 }
