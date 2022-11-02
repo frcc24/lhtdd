@@ -1,8 +1,8 @@
 import 'package:faker/faker.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:untitled1/data/data.dart';
 import 'package:untitled1/domain/domain.dart';
-import 'package:untitled1/usecases/usecases.dart';
 
 void main() {
   late HttpClientSpy httpClient;
@@ -29,20 +29,3 @@ void main() {
 }
 
 class HttpClientSpy extends Mock implements HttpClient {}
-
-abstract class HttpClient {
-  Future<AccountEntity>? request(
-      {required String url, required String method, Map body});
-}
-
-class RemoteAuthentication {
-  final HttpClient httpClient;
-  final String url;
-
-  RemoteAuthentication({required this.httpClient, required this.url});
-
-  Future<AccountEntity?>? auth(AuthenticationParams params) async {
-    final body = {'email': params.email, 'password': params.password};
-    return await httpClient.request(url: url, method: 'post', body: body);
-  }
-}
