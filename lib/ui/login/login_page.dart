@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:untitled1/ui/ui.dart';
 
 import 'local_widgets/local_wodgets.dart';
+import 'login_page_controller.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends GetView<LoginPageController> {
   static const ROUTE = '/login_page';
 
   const LoginPage({Key? key}) : super(key: key);
@@ -34,7 +37,11 @@ class LoginPage extends StatelessWidget {
                       const SizedBox(
                         height: 28,
                       ),
-                      RaisedButton(onPressed: () {}, child: Text('Sing In')),
+                      RaisedButton(
+                          onPressed: () {
+                            Get.toNamed(DashboardPage.ROUTE);
+                          },
+                          child: Text('Sing In')),
                       const SizedBox(
                         height: 12,
                       ),

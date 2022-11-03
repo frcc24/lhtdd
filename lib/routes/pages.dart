@@ -12,5 +12,12 @@ List<GetPage> getAppPages() {
           () => LoginPageController(),
           fenix: true)),
     ),
+    GetPage<void>(
+      name: DashboardPage.ROUTE,
+      page: () => const DashboardPage(),
+      binding: BindingsBuilder<void>(() => Get.lazyPut<DashboardPageController>(
+          () => DashboardPageController(),
+          fenix: true)),
+    ),
   ];
 }
