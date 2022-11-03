@@ -25,7 +25,8 @@ class App extends StatelessWidget {
   ThemeData buildThemeData(
       Color primaryColor, Color primaryColorDark, Color primaryColorLight) {
     return ThemeData(
-      primaryColor: primaryColor,
+      colorSchemeSeed: primaryColorDark,
+      //primaryColor: primaryColor,
       primaryColorDark: primaryColorDark,
       primaryColorLight: primaryColorLight,
       backgroundColor: Colors.white,
@@ -33,6 +34,8 @@ class App extends StatelessWidget {
       textTheme: TextTheme(
         headline1: TextStyle(
             fontSize: 35, fontWeight: FontWeight.w500, color: primaryColorDark),
+        headline6: TextStyle(
+            fontSize: 14, fontWeight: FontWeight.w300, color: Colors.white70),
       ),
       inputDecorationTheme: InputDecorationTheme(
         focusColor: primaryColor,
